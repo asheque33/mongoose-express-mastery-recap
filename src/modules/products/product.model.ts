@@ -23,6 +23,6 @@ const ProductSchema = new Schema<IProduct>({
 });
 
 // Create the Product model
-const ProductModel = model<IProduct>("ProductModel", ProductSchema);
+const ProductModel = model<IProduct>("Product", ProductSchema);
 
 export default ProductModel;
