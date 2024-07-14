@@ -25,8 +25,30 @@ const getProductById = async (req: Request, res: Response) => {
     data: result,
   });
 };
+const updateProductById = async (req: Request, res: Response) => {
+  const id = req.params.productId;
+  const existedProduct = req.body;
+  const result = await ProductServices.updateProductInDB(id, existedProduct);
+  res.json({
+    success: true,
+    message: "Product is updated successfully",
+    data: result,
+  });
+};
+const deleteProductById = async (req: Request, res: Response) => {
+  const { productId } = req.params;
+  const result = await ProductServices.deleteProductFromDB(productId);
+  console.log(result);
+  res.json({
+    success: true,
+    message: "Product is deleted successfully",
+    data: null,
+  });
+};
 export const ProductController = {
   createProduct,
   getAllProducts,
   getProductById,
+  updateProductById,
+  deleteProductById,
 };
