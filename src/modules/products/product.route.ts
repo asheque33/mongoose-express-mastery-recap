@@ -8,4 +8,4 @@ router.get("/", ProductController.getAllProducts);
 router.put("/:productId", ProductController.updateProductById);
 router.delete("/:productId", ProductController.deleteProductById);
 
-export const productsRouter = router;
+export const ProductRoutes = router;

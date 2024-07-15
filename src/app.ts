@@ -1,10 +1,13 @@
 import express, { Request, Response } from "express";
-import { productsRouter } from "./modules/products/product.route";
+import { ProductRoutes } from "./modules/products/product.route";
+import { OrderRoutes } from "./modules/Orders/Order.Routes";
+
 const app = express();
 // Parse JSON bodies (as sent by API clients)
 app.use(express.json());
 // Application routes
-app.use("/api/products", productsRouter);
+app.use("/api/products", ProductRoutes);
+app.use("/api/orders", OrderRoutes);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello World!");
