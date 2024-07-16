@@ -45,11 +45,19 @@ const deleteProductById = async (req: Request, res: Response) => {
     data: null,
   });
 };
-
+const getProductsBySearch = async (req: Request, res: Response) => {
+  const result = await ProductServices.getProductsBySearchFromDB(req.query);
+  res.json({
+    success: true,
+    message: `Products matching search term ${req.query.searchTerm} fetched successfully!`,
+    data: result,
+  });
+};
 export const ProductController = {
   createProduct,
   getAllProducts,
   getProductById,
   updateProductById,
   deleteProductById,
+  getProductsBySearch,
 };
