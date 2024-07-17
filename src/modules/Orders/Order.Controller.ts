@@ -1,19 +1,26 @@
 import { Request, Response } from "express";
 import { OrderServices } from "./Order.Services";
+import OrderValidationSchema from "./Order.Validation";
+import { Types } from "mongoose";
 
 const createOrder = async (req: Request, res: Response) => {
-  const order = req.body;
-  const result = await OrderServices.createOrderIntoDB(order);
   try {
-    res.status(201).json({
+    const order = req.body;
+    const zodParsedOrderData = OrderValidationSchema.parse(order);
+    const orderDataWithObjectId = {
+      ...zodParsedOrderData,
+      productId: new Types.ObjectId(zodParsedOrderData.productId),
+    };
+    const result = await OrderServices.createOrderIntoDB(orderDataWithObjectId);
+    res.json({
       success: true,
       message: "Order created successfully",
       data: result,
     });
-  } catch (error) {
-    res.status(500).json({
-      message: "Failed to create order",
-      error: error,
+  } catch (error: any) {
+    res.json({
+      success: false,
+      message: error.issues[0].message || "Failed to create order",
     });
   }
 };

@@ -14,7 +14,10 @@ const getProductFromDB = async (_id: string) => {
   return result;
 };
 const updateProductInDB = async (_id: string, existedProduct: IProduct) => {
-  const result = await ProductModel.findByIdAndUpdate(_id, existedProduct);
+  const result = await ProductModel.findByIdAndUpdate(_id, existedProduct, {
+    new: true,
+    runValidators: true,
+  });
   return result;
 };
 const deleteProductFromDB = async (_id: string) => {

@@ -1,12 +1,24 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response } from "express";
 import { ProductServices } from "./product.service";
+import ProductValidationSchema from "./product.validation";
 const createProduct = async (req: Request, res: Response) => {
-  const result = await ProductServices.createProductIntoDB(req.body);
-  res.json({
-    success: true,
-    message: "Product is created successfully",
-    data: result,
-  });
+  try {
+    const zodParsedProductData = ProductValidationSchema.parse(req.body);
+    const result = await ProductServices.createProductIntoDB(
+      zodParsedProductData
+    );
+    res.json({
+      success: true,
+      message: "Product is created successfully",
+      data: result,
+    });
+  } catch (error: any) {
+    res.json({
+      success: false,
+      message: error.issues[0].message || "Product creation failed",
+    });
+  }
 };
 const getAllProducts = async (req: Request, res: Response) => {
   const result = await ProductServices.getAllProductsFromDB();
@@ -26,14 +38,25 @@ const getProductById = async (req: Request, res: Response) => {
   });
 };
 const updateProductById = async (req: Request, res: Response) => {
-  const id = req.params.productId;
-  const existedProduct = req.body;
-  const result = await ProductServices.updateProductInDB(id, existedProduct);
-  res.json({
-    success: true,
-    message: "Product is updated successfully",
-    data: result,
-  });
+  try {
+    const id = req.params.productId;
+    const existedProduct = req.body;
+    const zodUpdatedProductData = ProductValidationSchema.parse(existedProduct);
+    const result = await ProductServices.updateProductInDB(
+      id,
+      zodUpdatedProductData
+    );
+    res.json({
+      success: true,
+      message: "Product is updated successfully",
+      data: result,
+    });
+  } catch (error: any) {
+    res.json({
+      success: false,
+      message: error.issues[0].message || "Product update failed",
+    });
+  }
 };
 const deleteProductById = async (req: Request, res: Response) => {
   const { productId } = req.params;
